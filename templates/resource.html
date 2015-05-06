@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="panel panel-default">
+    <div id="resource-title" class="panel-heading">
+        <div class="panel-title">
+        {{ subject }}
+        {% if bnode %}
+        (Blank Node)
+        {% endif %}
+        </div>
+    </div>
+    <table class="table table-bordered property-table table-condensed">
+        <tr>
+            <td class="panel-heading">PREDICATE</td>
+            <td class="panel-heading">OBJECT</td>
+        </tr>
+        {% for p, o, hash in cbd | sort %}
+            <tr>
+                <td class="property-name">{{ p }}</td>
+                <td class="property-value">
+                    {% if o in subjects %}
+                    <a href="{{ hash }}">{{ o }}</a>
+                    {% else %}
+                    {{ o }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

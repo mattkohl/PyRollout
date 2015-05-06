@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>rdfs:Classes</h2>
+<div class="panel-group" id="accordion">
+    {% for instance_type in instances %}
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" data-parent="#accordion" href="{{ '#collapse' + loop.index|string }}"><span class="badge">{{ instances[instance_type]|length }}</span>{{ instance_type }}</a>
+			</h4>
+		</div>
+		<div id="{{ 'collapse' + loop.index|string }}" class="panel-collapse collapse">
+			<div class="panel-body list-group">
+                {% for instance in instances[instance_type] | sort %}
+                    <a class="list-group-item" href="{{ instance[1] + '.html' }}">{{ instance[0] }}</a>
+                {% endfor %}
+            </div>
+		</div>
+	</div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>
+        {% if subject %}
+            {{ subject }} - Rollout
+        {% else %}
+            Rollout
+        {% endif %}
+    </title>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <!--<link href='http://fonts.googleapis.com/css?family=Sigmar+One' rel='stylesheet' type='text/css'>-->
+    <link href='http://fonts.googleapis.com/css?family=Lemon' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+        body { padding-top: 100px; }
+        @media screen and (max-width: 768px) {
+            body { padding-top: 0px; }
+        }
+        #logo {
+            font-family: 'Lemon', cursive;
+            color: #FFFF66;
+        }
+        #logo:hover {
+            color: #FF9900;
+        }
+        .badge {
+            float: right;
+        }
+        #resource-title {
+            font-weight: bold
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a id="logo" class="navbar-brand" href="_index.html">Rollout</a>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+    {% block content %}{% endblock %}
+    </div>
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  </body>
+</html>
+
+</body>
+</html>
