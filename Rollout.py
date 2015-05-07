@@ -2,6 +2,7 @@ import rdflib
 import os
 import shutil
 import argparse
+import time
 from jinja2 import Environment, PackageLoader
 
 
@@ -105,7 +106,7 @@ def get_concise_bounded_description(graph, resource):
 
 
 if __name__ == '__main__':
-
+    start = time.clock()
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", type=str, help="RDF input filename", required=True)
     args = parser.parse_args()
@@ -126,5 +127,6 @@ if __name__ == '__main__':
 
     write_index_html(index)
     write_resource_html(rdf_graph, subject_resources)
+    end = time.clock()
 
-    print('Done!')
+    print('Done! Rollout took{:3f} seconds'.format(end-start))
