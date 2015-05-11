@@ -108,7 +108,7 @@ def get_concise_bounded_description(graph, resource):
 if __name__ == '__main__':
     start = time.clock()
     parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--input", type=str, help="RDF input filename", required=True)
+    parser.add_argument("input", type=str, help="RDF input filename")
     args = parser.parse_args()
 
     source = args.input
