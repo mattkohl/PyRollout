@@ -85,10 +85,7 @@ def write_resource_html(graph, subjects, out_path='output'):
         outfile = os.path.join(out_path, str(uri_hash) + '.html')
         cbd = get_concise_bounded_description(graph, subject)
         template = env.get_template('resource.html')
-        if type(subject) is rdflib.term.BNode:
-            bnode = True
-        else:
-            bnode = False
+        bnode = type(subject) is rdflib.term.BNode
 
         with open(outfile, 'w', encoding='utf-8') as fn:
             html = template.render(subjects=subjects, subject=subject, cbd=cbd, bnode=bnode)
