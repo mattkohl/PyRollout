@@ -1,2 +1,2 @@
 # Rollout
-A Python script for publishing RDF!
+Builds a static site out of an RDF source
