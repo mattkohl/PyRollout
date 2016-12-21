@@ -15,16 +15,17 @@ def build_graph(source_file):
     :param source_file: RDF input filename, provided as a command line argument
     :return: an RDFLib graph in which source_file is parsed.
     """
-    g = rdflib.Graph()
+    g = rdflib.ConjunctiveGraph()
     source_format = get_source_format(source_file)
 
     try:
         g.parse(source_file, format=source_format, encoding='utf-8')
-    except:
-        raise IOError('Cannot parse', source_file)
+    except IOError as e:
+        print('Cannot parse', source_file, e)
     else:
         num_triples = len(g)
-        print(source_file, 'parsed. Found', num_triples, 'triples')
+        print(source_file, 'parsed.')
+        print('Found', num_triples, 'statements.')
     return g
 
 
@@ -76,7 +77,9 @@ def get_subjects(graph):
 def write_resource_html(graph, subject, subjects, out_path='output'):
     """
     :param graph: source content in RDFLib graph
+    :param subject: resource to be described
     :param subjects: a list of subjects from the graph
+    :param out_path: output path
 
     Populate html template with a concise bounded description of each subject
     & write to file, the name of which is a hash on subject.
@@ -98,9 +101,9 @@ def parallel_write_resource_html(graph, subjects, out_path='output'):
     """
     :param graph: source content in RDFLib graph
     :param subjects: a list of subjects from the graph
+    :param out_path: output path
 
-    Populate html template with a concise bounded description of each subject
-    & write to file, the name of which is a hash on subject.
+    Iterates over list of subjects and assigns the querying / html-writing to one of a number of threads.
     """
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
         future_to_html = {executor.submit(write_resource_html, graph, subject, subjects, out_path): subject for subject in subjects}
@@ -111,7 +114,7 @@ def parallel_write_resource_html(graph, subjects, out_path='output'):
             except Exception as e:
                 print('%r generated an exception: %s' % (html, e))
             else:
-                continue
+                print(html, "written.")
 
 
 def get_concise_bounded_description(graph, resource):
@@ -121,7 +124,7 @@ def get_concise_bounded_description(graph, resource):
     :return: a list of tuples, each of which contains uris of the predicate & object from each triple
     in which resource is the subject, as well as a hash of the object.
     """
-    return [(p, o, str(hash(o)) + '.html') for s, p, o in graph.triples((resource, None, None))]
+    return [(p, o, str(hash(o))) for s, p, o in graph.triples((resource, None, None))]
 
 
 if __name__ == '__main__':
