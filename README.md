@@ -9,4 +9,4 @@ A Python 3.4 script that builds a static site from an RDF source
 
     `python3.4 /my_source_directory/input.ttl /my_output_directory/`
 
-- Open `/my_output_directory/index.html` in your browser
+- Open `/my_output_directory/_index.html` in your browser

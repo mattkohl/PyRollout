@@ -3,6 +3,7 @@ import os
 import shutil
 import argparse
 import time
+import concurrent.futures
 from jinja2 import Environment, PackageLoader
 
 
@@ -72,7 +73,7 @@ def get_subjects(graph):
     return [s for s in graph.subjects(None, None)]
 
 
-def write_resource_html(graph, subjects, out_path='output'):
+def write_resource_html(graph, subject, subjects, out_path='output'):
     """
     :param graph: source content in RDFLib graph
     :param subjects: a list of subjects from the graph
@@ -80,16 +81,37 @@ def write_resource_html(graph, subjects, out_path='output'):
     Populate html template with a concise bounded description of each subject
     & write to file, the name of which is a hash on subject.
     """
-    for subject in subjects:
-        uri_hash = hash(subject)
-        outfile = os.path.join(out_path, str(uri_hash) + '.html')
-        cbd = get_concise_bounded_description(graph, subject)
-        template = env.get_template('resource.html')
-        bnode = type(subject) is rdflib.term.BNode
+    uri_hash = hash(subject)
+    outfile = os.path.join(out_path, str(uri_hash) + '.html')
+    cbd = get_concise_bounded_description(graph, subject)
+    template = env.get_template('resource.html')
+    bnode = type(subject) is rdflib.term.BNode
 
-        with open(outfile, 'w', encoding='utf-8') as fn:
-            html = template.render(subjects=subjects, subject=subject, cbd=cbd, bnode=bnode)
-            fn.write(html)
+    with open(outfile, 'w', encoding='utf-8') as fn:
+        html = template.render(subjects=subjects, subject=subject, cbd=cbd, bnode=bnode)
+        fn.write(html)
+        fn.close()
+        return outfile
+
+
+def parallel_write_resource_html(graph, subjects, out_path='output'):
+    """
+    :param graph: source content in RDFLib graph
+    :param subjects: a list of subjects from the graph
+
+    Populate html template with a concise bounded description of each subject
+    & write to file, the name of which is a hash on subject.
+    """
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
+        future_to_html = {executor.submit(write_resource_html, graph, subject, subjects, out_path): subject for subject in subjects}
+        for future in concurrent.futures.as_completed(future_to_html):
+            html = future_to_html[future]
+            try:
+                data = future.result()
+            except Exception as e:
+                print('%r generated an exception: %s' % (html, e))
+            else:
+                continue
 
 
 def get_concise_bounded_description(graph, resource):
@@ -114,6 +136,7 @@ if __name__ == '__main__':
 
     if os.path.exists(output_path):
         try:
+            print(output_path, 'exists. Attempting to delete.')
             shutil.rmtree(output_path)
         except:
             raise(OSError('Unable to refresh output directory.'))
@@ -121,11 +144,17 @@ if __name__ == '__main__':
 
     rdf_graph = build_graph(source)
 
-    subject_resources = get_subjects(rdf_graph)
+    subject_resources = list(set(get_subjects(rdf_graph)))
+    print("Found", len(subject_resources), "subjects.")
+
     index = build_index(rdf_graph)
+    print("Index built.")
 
     write_index_html(index, output_path)
-    write_resource_html(rdf_graph, subject_resources, output_path)
-    end = time.clock()
+    print("Index written to html.")
 
+    parallel_write_resource_html(rdf_graph, subject_resources, output_path)
+    print(len(subject_resources), "resources written to html.")
+
+    end = time.clock()
     print('Done! Rollout took {:3f} seconds'.format(end-start))
