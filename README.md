@@ -1,18 +1,17 @@
 # Rollout
 A Python 3.4 script that builds a static site from an RDF source
 
-## To Install
+## Install
 - Clone the project
 
     `git clone https://github.com/mattkohl/Rollout.git`
 
-## To Run 
-#### *with Spark (recommended)*
+## Run with Spark *(recommended)*
 - Navigate to `/your_spark/bin/` & execute the following:
     `./spark-submit /path/to/Rollout/Rollout_with_Spark.py /your_source_directory/input.nq /your_output_directory/`
 
-#### *without Spark (only for small RDF files)*
+## Run without Spark *(only for small RDF files)*
     `python3.4 Rollout.py /your_source_directory/input.ttl /your_output_directory/`
 
-## To View the Results
+## View the Results
 - Open `/your_output_directory/_index.html` in your browser
