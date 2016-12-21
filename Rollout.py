@@ -106,10 +106,11 @@ if __name__ == '__main__':
     start = time.clock()
     parser = argparse.ArgumentParser()
     parser.add_argument("input", type=str, help="RDF input filename")
+    parser.add_argument("output", type=str, help="output directory")
     args = parser.parse_args()
 
     source = args.input
-    output_path = os.path.join('output', source.split(os.path.sep)[-1])
+    output_path = args.output
 
     if os.path.exists(output_path):
         try:
