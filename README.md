@@ -5,7 +5,7 @@ A PySpark script that builds a static site from an RDF source
 
 ### Install
 
-Clone the project
+Clone the project with this command:
 
 ```git clone https://github.com/mattkohl/Rollout.git```
     
@@ -21,4 +21,4 @@ Navigate to `/your_spark/bin/` & execute the following:
 
 ### View the Results
 
-Open `/your_output_directory/_index.html` in your browser
+Open `/your_output_directory/_index.html` in your browser.
