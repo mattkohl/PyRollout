@@ -17,7 +17,7 @@ Navigate to `/your_spark/bin/` & execute the following:
 
 ```./spark-submit /path/to/Rollout/Rollout.py /your_source_directory/input.nq /your_output_directory/```
 
-* N.B. `Rollout` is written in Python 3.4, so please ensure to `export PYSPARK_PYTHON=python3` *
+*N.B. `Rollout` is written in Python 3.4, so please ensure to `export PYSPARK_PYTHON=python3`*
 
 ### View the Results
 
