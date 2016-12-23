@@ -11,19 +11,26 @@
         {% endif %}
     </title>
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <!--<link href='http://fonts.googleapis.com/css?family=Sigmar+One' rel='stylesheet' type='text/css'>-->
     <link href='http://fonts.googleapis.com/css?family=Lemon' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://bootswatch.com/flatly/bootstrap.min.css" type="text/css"/>
     <style type="text/css">
-        body { padding-top: 100px; }
+        body {
+            padding-top: 100px;
+        }
+        nav {
+        }
+        a {
+        }
         @media screen and (max-width: 768px) {
             body { padding-top: 0px; }
         }
-        #logo {
+        a#logo {
             font-family: 'Lemon', cursive;
-            color: #FFFF66;
+            color: #95a5a6
         }
-        #logo:hover {
-            color: #FF9900;
+        a#logo:hover {
+            transition: text-shadow 0.5s ease;
+            text-shadow: 1px 1px 8px #4a5253 !important;
         }
         .badge {
             float: right;
@@ -31,10 +38,14 @@
         #resource-title {
             font-weight: bold
         }
+
+        .panel-group .panel:hover {
+            background: #d4dbdb;
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
           <a id="logo" class="navbar-brand" href="_index.html">Rollout</a>
