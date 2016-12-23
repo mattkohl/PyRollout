@@ -17,8 +17,6 @@
         body {
             padding-top: 100px;
         }
-        nav {
-        }
         a {
             text-decoration: none;
         }
@@ -55,13 +53,25 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a id="logo" class="navbar-brand" href="_index.html">Rollout</a>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a id="logo" class="navbar-brand" href="_index.html">Rollout</a>
+                <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbar-main" aria-expanded="false">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse" id="navbar-main">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="https://github.com/mattkohl/Rollout" target="_blank">GitHub</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
-    </nav>
+    </div>
     <div class="container">
     {% block content %}{% endblock %}
     </div>
