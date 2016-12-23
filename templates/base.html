@@ -30,11 +30,10 @@
             color: #95a5a6
         }
         a#logo:hover {
-            transition: text-shadow 0.5s ease;
-            text-shadow: 1px 1px 8px #4a5253 !important;
+            color: #d4dbdb;
         }
         a:hover {
-            text-decoration: none;
+            text-decoration: none !important;
         }
         .badge {
             float: right;
@@ -43,8 +42,15 @@
             font-weight: bold
         }
 
-        .panel-group .panel:hover {
-            background: #d4dbdb;
+        .panel-group .panel .panel-heading:hover, .panel-body a.list-group-item:hover, td.property-value>a:hover {
+            background: #d4dbdb !important;
+        }
+        td {
+            padding: .5em 1em !important;
+        }
+
+        td.property-value>a {
+            text-decoration: none !important;
         }
     </style>
 </head>
