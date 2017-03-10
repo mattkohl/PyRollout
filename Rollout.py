@@ -3,6 +3,7 @@ import os
 import shutil
 import argparse
 import time
+import webbrowser
 import rdflib
 from jinja2 import Environment, PackageLoader
 
@@ -56,7 +57,7 @@ def build_index(triples):
     return rdftype_uri_hash_tups.collectAsMap()
 
 
-def write_index_html(instances, out_path="output"):
+def write_index_html(instances, input, out_path="output"):
     """
     :param instances: a dict in which the keys are RDF.types in the source graph,
     and the values are instance uris of those types
@@ -66,8 +67,9 @@ def write_index_html(instances, out_path="output"):
     """
     template = env.get_template("index.html")
     outfile = os.path.join(out_path, "_index.html")
+    heading = os.path.split(input)[-1]
     with open(outfile, "w") as fn:
-        fn.write(template.render(instances=instances))
+        fn.write(template.render(instances=instances, heading=heading))
 
 
 def build_cbds(triples):
@@ -149,7 +151,7 @@ if __name__ == "__main__":
 
     print("Building index.")
     index = build_index(triples)
-    write_index_html(index, output_path)
+    write_index_html(index, source, output_path)
     print("Index written to", os.path.join(output_path, "_index.html"))
 
     print("Building resource pages.")
@@ -166,3 +168,4 @@ if __name__ == "__main__":
     print("Done! Rollout took %d:%02d:%02d to finish." % (h, m, s))
 
     print("To start exploring, open up", os.path.join(output_path, "_index.html"))
+    webbrowser.open_new_tab("file://" + os.path.join(output_path, "_index.html"))
