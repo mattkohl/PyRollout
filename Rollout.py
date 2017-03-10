@@ -13,16 +13,16 @@ RDF_TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 env = Environment(loader=PackageLoader("Rollout", "templates"))
 
 
-def extract_triples(source):
+def extract_triples(source_file):
     g = rdflib.ConjunctiveGraph()
-    source_format = get_source_format(source)
+    source_format = get_source_format(source_file)
     try:
-        g.parse(source, format=source_format, encoding="utf-8")
+        g.parse(source_file, format=source_format, encoding="utf-8")
     except IOError as e:
-        print("Cannot parse", source, e)
+        print("Cannot parse", source_file, e)
         sys.exit(1)
     else:
-        print(source, "parsed. Found", len(g), "triples.")
+        print(source_file, "parsed. Found", len(g), "triples.")
         return sc.parallelize([(s.toPython(), p.toPython(), o.toPython()) for s, p, o in g])
 
 
@@ -57,17 +57,18 @@ def build_index(triples):
     return rdftype_uri_hash_tups.collectAsMap()
 
 
-def write_index_html(instances, input, out_path="output"):
+def write_index_html(instances, input_path, out_path="output"):
     """
     :param instances: a dict in which the keys are RDF.types in the source graph,
     and the values are instance uris of those types
+    :param input_path: source path/filename - becomes index heading
     :param out_path: where to write output
 
     Populate html template with instances & write to file "_index.html".
     """
     template = env.get_template("index.html")
     outfile = os.path.join(out_path, "_index.html")
-    heading = os.path.split(input)[-1]
+    heading = os.path.split(input_path)[-1]
     with open(outfile, "w") as fn:
         fn.write(template.render(instances=instances, heading=heading))
 
@@ -147,18 +148,18 @@ if __name__ == "__main__":
     os.mkdir(output_path)
     print(output_path, "created.")
 
-    triples = extract_triples(source)
+    trips = extract_triples(source)
 
     print("Building index.")
-    index = build_index(triples)
+    index = build_index(trips)
     write_index_html(index, source, output_path)
     print("Index written to", os.path.join(output_path, "_index.html"))
 
     print("Building resource pages.")
-    cbds = build_cbds(triples)
-    subjects = [t[0] for t in cbds.keys()]
-    [write_resource_html(key, cbds[key], subjects, output_path) for key in cbds]
-    print(len(subjects), "resource pages written.")
+    cbds = build_cbds(trips)
+    subjs = [t[0] for t in cbds.keys()]
+    [write_resource_html(key, cbds[key], subjs, output_path) for key in cbds]
+    print(len(subjs), "resource pages written.")
 
     end = time.clock()
     total_time = end - start
