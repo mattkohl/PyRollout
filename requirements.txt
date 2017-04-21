@@ -1,2 +1,5 @@
-rdflib
-Jinja2
+isodate==0.5.4
+Jinja2==2.9.6
+MarkupSafe==1.0
+pyparsing==2.2.0
+rdflib==4.2.2
