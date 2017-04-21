@@ -1,5 +1,4 @@
 # Rollout
----
 
 A PySpark script that builds a static site from an RDF source
 
