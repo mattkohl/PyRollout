@@ -71,6 +71,7 @@ def write_index_html(instances, input_path, out_path="output"):
     heading = os.path.split(input_path)[-1]
     with open(outfile, "w") as fn:
         fn.write(template.render(instances=instances, heading=heading))
+        fn.close()
 
 
 def build_cbds(triples):
@@ -94,15 +95,15 @@ def build_cbds(triples):
     return cbds
 
 
-def write_resource_html(subject, cbd, subjects, out_path="output"):
+def write_resource_html(subject_tuple, cbd, subjects, out_path="output"):
     """
-    :param subject: uri of resource to write
+    :param subject_tuple: (uri of resource to write, a hash of that)
     :param cbd: concise bounded description of resource (See function build_cbds for more info)
     :param subjects: set of all subject uris
     :param out_path: where to write output
     :return: filename
     """
-    (subject, uri_hash) = subject
+    (subject, uri_hash) = subject_tuple
 
     outfile = os.path.join(out_path, str(uri_hash) + ".html")
     template = env.get_template("resource.html")
