@@ -13,8 +13,8 @@ If you don't have Spark, download it [here](http://spark.apache.org/downloads.ht
 Create a [virtual environment](https://pypi.python.org/pypi/virtualenv), activate it, and install the dependencies:
 
 ```
-virtualenv ~/.Rollout
-source ~/.Rollout/bin/activate
+virtualenv -p python3 ~/.virtualenvs/Rollout
+source ~/.virtualenvs/Rollout/bin/activate
 pip install -r requirements.txt
 ```
 
