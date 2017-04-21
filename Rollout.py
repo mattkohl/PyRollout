@@ -17,7 +17,7 @@ def extract_triples(source_file):
     g = rdflib.ConjunctiveGraph()
     source_format = get_source_format(source_file)
     try:
-        g.parse(source_file, format=source_format, encoding="utf-8")
+        g.parse(source_file, format=source_format)
     except IOError as e:
         print("Cannot parse", source_file, e)
         sys.exit(1)
