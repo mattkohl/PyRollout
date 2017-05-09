@@ -20,9 +20,11 @@ def test_get_source_format():
     f1 = "test.nt"
     f2 = "test.nq"
     f3 = "test.ttl"
+    f4 = "test.rdf"
     assert get_source_format(f1) == "nt"
     assert get_source_format(f2) == "nquads"
     assert get_source_format(f3) == "turtle"
+    assert get_source_format(f4) == "xml"
 
 
 def test_build_index(spark_context):
