@@ -21,19 +21,24 @@ pip install -r requirements.txt
 ```
 
 ### Test
+Set your `SPARK_HOME` environment variable like so:
+```bash
+export SPARK_HOME=~/your/path/to/spark
+```
+Then execute this command:
 ```bash
 pytest -q TestRollout.py 
 ```
 
 ### Run 
 
-Navigate to `/your_spark/bin/` & set Spark's Python environment variable:
+Set Spark's Python environment variable:
 
 ```bash
 export PYSPARK_PYTHON=python3
 ```
 
-Then execute the following:
+Navigate to `/your_spark/bin/` & execute the following:
 
 ```bash
 ./spark-submit /path/to/Rollout/Rollout.py /your_source_directory/input.nq /your_output_directory/
