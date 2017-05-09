@@ -57,6 +57,11 @@ def build_index(triples):
     return rdftype_uri_hash_tups.collectAsMap()
 
 
+def fill_template(template_file, template_params):
+    template = env.get_template(template_file)
+    return template.render(**template_params)
+
+
 def write_index_html(instances, input_path, out_path="output"):
     """
     :param instances: a dict in which the keys are RDF.types in the source graph,
@@ -66,11 +71,12 @@ def write_index_html(instances, input_path, out_path="output"):
 
     Populate html template with instances & write to file "_index.html".
     """
-    template = env.get_template("index.html")
     outfile = os.path.join(out_path, "_index.html")
     heading = os.path.split(input_path)[-1]
+    template = fill_template("index.html", {"instances": instances, "heading": heading})
+
     with open(outfile, "w") as fn:
-        fn.write(template.render(instances=instances, heading=heading))
+        fn.write(template)
         fn.close()
 
 
@@ -106,11 +112,10 @@ def write_resource_html(subject_tuple, cbd, subjects, out_path="output"):
     (subject, uri_hash) = subject_tuple
 
     outfile = os.path.join(out_path, str(uri_hash) + ".html")
-    template = env.get_template("resource.html")
     bnode = not subject.startswith("http")
 
     with open(outfile, "w", encoding="utf-8") as fn:
-        html = template.render(subjects=subjects, subject=subject, cbd=cbd, bnode=bnode)
+        html = fill_template("resource.html", {"subjects": subjects, "subject": subject, "cbd": cbd, "bnode": bnode})
         fn.write(html)
         fn.close()
         return outfile
