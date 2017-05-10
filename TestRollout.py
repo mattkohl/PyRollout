@@ -7,7 +7,7 @@ import pytest
 from pyspark import SparkConf
 from pyspark import SparkContext
 
-from .Rollout import RDF_TYPE, get_source_format, build_index, build_cbds
+from .Rollout import RDF_TYPE, get_source_format, build_index, build_cbds, fill_template
 
 
 TRIPLES = [
@@ -43,6 +43,30 @@ def test_build_cbds(spark_context):
     assert len(cbds) == 2
     assert ("http://example.org/1234", "-2058394215090544516") in cbds
     assert len(cbds[("http://example.org/1234", "-2058394215090544516")]) == 1
+
+
+def test_fill_template_index():
+    template_file = "index.html"
+    heading = "heading"
+    instances = []
+    params = {"heading": heading, "instances": instances}
+    result = fill_template(template_file, params)
+
+    assert heading in result
+
+
+def test_fill_template_resource():
+    template_file = "resource.html"
+    subjects = {"http://example.org/1234"}
+    subject = "http://example.org/1234"
+    cbd = [
+        ("www.example.org/knows", "www.example.org/2345", "-6590047765216027844"),
+        ("www.example.org/knows", "www.example.org/3456", "-4985268491244785538")
+    ]
+    bnode = False
+    result = fill_template(template_file, {"subjects": subjects, "subject": subject, "cbd": cbd, "bnode": bnode})
+
+    assert subject in result
 
 
 def quiet_py4j():
