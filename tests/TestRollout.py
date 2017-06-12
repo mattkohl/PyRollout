@@ -1,13 +1,15 @@
 import findspark  # this needs to be the first import
 findspark.init()
 
+import os
 import logging
 import pytest
 
 from pyspark import SparkConf
 from pyspark import SparkContext
 
-from Rollout import RDF_TYPE, get_source_format, build_index, build_cbds, fill_template, extract_triples
+from Rollout import RDF_TYPE, get_source_format, build_index, build_cbds, \
+    fill_template, extract_triples, write_index_html, write_resource_html
 
 
 TRIPLES = [
@@ -46,6 +48,18 @@ def test_build_index(spark_context):
     assert len(index) == 1
     assert "http://example.org/Person" in index
     assert len(index["http://example.org/Person"]) == 2
+
+
+def test_write_index_html(tmpdir):
+    instances = {
+        "www.example.org/Person": [
+            ("www.example.org/1234", "8245348113301530764"),
+            ("www.example.org/2345", "-6590047765216027844"),
+            ("www.example.org/3456", "-4985268491244785538")
+        ]
+    }
+    file = tmpdir.join('output')
+    pass
 
 
 def test_build_cbds(spark_context):

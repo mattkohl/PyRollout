@@ -46,7 +46,7 @@ def build_index(triples):
 
     For example:
     {
-        ("www.example.org/Person": [
+        "www.example.org/Person": [
             ("www.example.org/1234", "8245348113301530764"),
             ("www.example.org/2345", "-6590047765216027844"),
             ("www.example.org/3456", "-4985268491244785538")
@@ -76,6 +76,7 @@ def write_index_html(instances, input_path, out_path="output"):
     Populate html template with instances & write to file "_index.html".
     """
     outfile = os.path.join(out_path, "_index.html")
+    print(outfile)
     heading = os.path.split(input_path)[-1]
     template = fill_template("index.html", {"instances": instances, "heading": heading})
 
