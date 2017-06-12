@@ -48,3 +48,4 @@ fabric.properties
 
 .coverage
 cov_html
+.cache

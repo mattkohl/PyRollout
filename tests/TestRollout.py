@@ -7,7 +7,7 @@ import pytest
 from pyspark import SparkConf
 from pyspark import SparkContext
 
-from .Rollout import RDF_TYPE, get_source_format, build_index, build_cbds, fill_template
+from Rollout import RDF_TYPE, get_source_format, build_index, build_cbds, fill_template, extract_triples
 
 
 TRIPLES = [
