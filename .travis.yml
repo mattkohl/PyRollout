@@ -1,0 +1,16 @@
+language: python
+
+python:
+  - "3.5"
+before_install:
+  - export DISPLAY=:99.0
+  - export PYSPARK_PYTHON=python3
+  - export SPARK_HOME=/tmp/spark-2.1.1-bin-hadoop2.7
+install:
+  - ./install-spark.sh
+  - pip install -r requirements.txt
+  - pip install coveralls
+script:
+  - pytest -q TestRollout.py
+after_success:
+  coveralls
