@@ -23,7 +23,11 @@ def extract_triples(source_file):
         sys.exit(1)
     else:
         print(source_file, "parsed. Found", len(g), "triples.")
-        return sc.parallelize([(s.toPython(), p.toPython(), o.toPython()) for s, p, o in g])
+        return g
+
+
+def parallelize_triples(g):
+    return sc.parallelize([(s.toPython(), p.toPython(), o.toPython()) for s, p, o in g])
 
 
 def get_source_format(source_file):
@@ -154,7 +158,8 @@ if __name__ == "__main__":
     os.mkdir(output_path)
     print(output_path, "created.")
 
-    trips = extract_triples(source)
+    trips_graph = extract_triples(source)
+    trips = parallelize_triples(trips_graph)
 
     print("Building index.")
     index = build_index(trips)

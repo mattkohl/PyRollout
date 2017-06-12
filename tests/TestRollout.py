@@ -15,6 +15,18 @@ TRIPLES = [
     ('http://example.org/2345', RDF_TYPE, "http://example.org/Person"),
 ]
 
+TEST_RDF_PATH = "tests/resources/test.nt"
+
+
+def test_extract_triples():
+    results = extract_triples(TEST_RDF_PATH)
+    assert len(results) == 229
+
+
+def test_extract_triples_bad_path():
+    with pytest.raises(SystemExit):
+        extract_triples("bad/path/here.ttl")
+
 
 def test_get_source_format():
     f1 = "test.nt"
