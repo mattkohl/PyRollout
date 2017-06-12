@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mattkohl/Rollout.svg?branch=master)](https://travis-ci.org/mattkohl/Rollout) [![Coverage Status](https://coveralls.io/repos/github/mattkohl/Rollout/badge.svg?branch=master)](https://coveralls.io/github/mattkohl/Rollout?branch=master)
+
 # Rollout
 
 A PySpark script that builds a static site from an RDF source
