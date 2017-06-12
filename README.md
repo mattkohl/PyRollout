@@ -29,7 +29,7 @@ export SPARK_HOME=~/your/path/to/spark
 ```
 Then execute this command:
 ```bash
-pytest -q TestRollout.py 
+pytest -q tests/* 
 ```
 
 ### Run 
