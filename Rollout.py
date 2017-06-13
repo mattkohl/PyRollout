@@ -2,10 +2,18 @@ import sys
 import os
 import shutil
 import argparse
-import time
+import logging
 import webbrowser
 import rdflib
 from jinja2 import Environment, PackageLoader
+
+
+logger = logging.getLogger("RolloutLog")
+handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
 
 RDF_TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
@@ -19,10 +27,10 @@ def extract_triples(source_file):
     try:
         g.parse(source_file, format=source_format)
     except IOError as e:
-        print("Cannot parse", source_file, e)
+        logger.error("Cannot parse" + source_file)
         sys.exit(1)
     else:
-        print(source_file, "parsed. Found", len(g), "triples.")
+        logger.info("{} parsed. Found {} triples.".format(source_file, len(g)))
         return g
 
 
@@ -133,26 +141,26 @@ def parse_args(args):
 
 def prepare_output_directory(outpath):
     if os.path.exists(outpath):
+        logger.warning("{} exists. Attempting to delete.".format(outpath))
         try:
-            print(outpath, "exists. Attempting to delete.")
             shutil.rmtree(outpath)
         except:
             raise(OSError("Unable to refresh output directory."))
         else:
-            print("Existing copy of", outpath, "removed.")
+            logger.info("Existing copy of {} removed.".format(outpath))
     os.mkdir(outpath)
-    print(outpath, "created.")
+    logger.info("{} created.".format(outpath))
 
 
 def import_spark():  # pragma: no cover
     try:
         from pyspark import SparkContext
         from pyspark import SparkConf
-        print("Successfully imported Spark Modules")
     except ImportError as e:
-        print("Cannot import Spark Modules", e)
+        logger.error("Cannot import Spark Modules")
         sys.exit(1)
     else:
+        logger.info("Successfully imported Spark Modules")
         spark_conf = SparkConf().setMaster("local").setAppName("Rollout")
         spark_context = SparkContext(conf=spark_conf)
         return spark_conf, spark_context
@@ -181,7 +189,7 @@ def pipeline(source, output_path):
     return get_index_filename(output_path)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
 
     # set up Spark
     conf, sc = import_spark()
