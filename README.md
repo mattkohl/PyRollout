@@ -9,27 +9,37 @@ A PySpark script that builds a static site from an RDF source
 Clone the project with this command:
 
 ```bash
-git clone https://github.com/mattkohl/Rollout.git
+$ git clone https://github.com/mattkohl/Rollout.git
 ```
     
-If you don't have Spark, download it [here](http://spark.apache.org/downloads.html).
+If you don't have Spark, download it [here](http://spark.apache.org/downloads.html), or run for a tmp installation:
+
+```bash
+$ ./install-spark.sh
+```
 
 Create a [virtual environment](https://pypi.python.org/pypi/virtualenv), activate it, and install the dependencies:
 
 ```bash
-virtualenv -p python3 ~/.virtualenvs/Rollout
-source ~/.virtualenvs/Rollout/bin/activate
-pip install -r requirements.txt
+$ virtualenv -p python3 ~/.virtualenvs/Rollout
+$ source ~/.virtualenvs/Rollout/bin/activate
+(Rollout)$ pip install -r requirements.txt
 ```
 
 ### Test
 Set your `SPARK_HOME` environment variable like so:
 ```bash
-export SPARK_HOME=~/your/path/to/spark
+(Rollout)$ export SPARK_HOME=~/your/path/to/spark
 ```
 Then execute this command:
 ```bash
-pytest -q tests/* 
+(Rollout)$ pytest -q tests/* 
+```
+
+Or with coverage:
+
+```bash
+(Rollout)$ pytest --cov=Rollout tests/*
 ```
 
 ### Run 
@@ -37,13 +47,13 @@ pytest -q tests/*
 Set Spark's Python environment variable:
 
 ```bash
-export PYSPARK_PYTHON=python3
+(Rollout)$ export PYSPARK_PYTHON=python3
 ```
 
 Navigate to `/your_spark/bin/` & execute the following:
 
 ```bash
-./spark-submit /path/to/Rollout/Rollout.py /your_source_directory/input.nq /your_output_directory/
+(Rollout)$ ./spark-submit /path/to/Rollout/Rollout.py /your_source_directory/input.nq /your_output_directory/
 ```
 
 ### View the Results

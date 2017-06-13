@@ -11,6 +11,6 @@ install:
   - pip install -r requirements.txt
   - pip install coveralls
 script:
-  - py.test --cov=Rollout tests/*
+  - pytest --cov=Rollout tests/*
 after_success:
   coveralls
