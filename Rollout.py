@@ -126,6 +126,27 @@ def write_resource_html(subject_tuple, cbd, subjects, out_path="output"):
         return outfile
 
 
+def parse_args(args):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input", type=str, help="RDF input filename")
+    parser.add_argument("output", type=str, help="output directory")
+    parsed = parser.parse_args(args)
+    return parsed.input, parsed.output
+
+
+def handle_output_path(outpath):
+    if os.path.exists(outpath):
+        try:
+            print(outpath, "exists. Attempting to delete.")
+            shutil.rmtree(outpath)
+        except:
+            raise(OSError("Unable to refresh output directory."))
+        else:
+            print("Existing copy of", outpath, "removed.")
+    os.mkdir(outpath)
+    print(outpath, "created.")
+
+
 if __name__ == "__main__":
     start = time.clock()
     try:
@@ -140,24 +161,9 @@ if __name__ == "__main__":
     conf = SparkConf().setMaster("local").setAppName("Rollout")
     sc = SparkContext(conf=conf)
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("input", type=str, help="RDF input filename")
-    parser.add_argument("output", type=str, help="output directory")
-    args = parser.parse_args()
-    source = args.input
-    output_path = args.output
+    source, output_path = parse_args(sys.argv[1:])
 
-    # Attempts to clean up output directory
-    if os.path.exists(output_path):
-        try:
-            print(output_path, "exists. Attempting to delete.")
-            shutil.rmtree(output_path)
-        except:
-            raise(OSError("Unable to refresh output directory."))
-        else:
-            print("Existing copy of", output_path, "removed.")
-    os.mkdir(output_path)
-    print(output_path, "created.")
+    handle_output_path(output_path)
 
     trips_graph = extract_triples(source)
     trips = parallelize_triples(trips_graph)

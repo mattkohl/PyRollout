@@ -9,7 +9,7 @@ from pyspark import SparkConf
 from pyspark import SparkContext
 
 from Rollout import RDF_TYPE, get_source_format, build_index, build_cbds, \
-    fill_template, extract_triples, write_index_html, write_resource_html
+    fill_template, extract_triples, parse_args, handle_output_path
 
 
 TRIPLES = [
@@ -18,6 +18,29 @@ TRIPLES = [
 ]
 
 TEST_RDF_PATH = "tests/resources/test.nt"
+
+
+def test_parse_args():
+    a1, a2 = parse_args(['test1.ttl', 'test1'])
+    assert a1 == "test1.ttl"
+    assert a2 == "test1"
+
+
+def test_parse_bad_args():
+    with pytest.raises(SystemExit):
+        parse_args([])
+
+
+def test_handle_output_path(tmpdir):
+    tmpdir.mkdir("sub").join("hello.txt").write("content")
+    assert len(tmpdir.listdir()) == 1
+    handle_output_path(tmpdir.strpath)
+    assert len(tmpdir.listdir()) == 0
+
+
+def test_handle_bad_output_path():
+    with pytest.raises(OSError):
+        handle_output_path("/")
 
 
 def test_extract_triples():
