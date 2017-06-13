@@ -12,7 +12,7 @@ Clone the project with this command:
 $ git clone https://github.com/mattkohl/Rollout.git
 ```
     
-If you don't have Spark, download it [here](http://spark.apache.org/downloads.html), or run for a tmp installation:
+If you don't have Spark, download it [here](http://spark.apache.org/downloads.html), or run `install-spark.sh` for a tmp installation:
 
 ```bash
 $ ./install-spark.sh
