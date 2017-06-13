@@ -8,8 +8,9 @@ import pytest
 from pyspark import SparkConf
 from pyspark import SparkContext
 
-from Rollout import RDF_TYPE, get_source_format, build_index, build_cbds, \
-    fill_template, extract_triples, parse_args, handle_output_path
+from Rollout import RDF_TYPE, env, get_source_format, build_index, build_cbds, \
+    fill_template, extract_triples, parse_args, handle_output_path, \
+    write_html, write_index_html, write_resource_html
 
 
 TRIPLES = [
@@ -40,7 +41,7 @@ def test_handle_output_path(tmpdir):
 
 def test_handle_bad_output_path():
     with pytest.raises(OSError):
-        handle_output_path("/")
+        handle_output_path("/")  # illegal dir name
 
 
 def test_extract_triples():
@@ -116,6 +117,11 @@ def test_fill_template_resource():
     result = fill_template(template_file, {"subjects": subjects, "subject": subject, "cbd": cbd, "bnode": bnode})
 
     assert subject in result
+
+
+def test_write_html(tmpdir):
+    written = write_html(os.path.join(tmpdir.strpath, "temp.html"), "index.html", {"instances": [], "heading": "heading"} )
+    assert written.endswith("temp.html")
 
 
 def quiet_py4j():

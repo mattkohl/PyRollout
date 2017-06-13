@@ -66,25 +66,6 @@ def fill_template(template_file, template_params):
     return template.render(**template_params)
 
 
-def write_index_html(instances, input_path, out_path="output"):
-    """
-    :param instances: a dict in which the keys are RDF.types in the source graph,
-    and the values are instance uris of those types
-    :param input_path: source path/filename - becomes index heading
-    :param out_path: where to write output
-
-    Populate html template with instances & write to file "_index.html".
-    """
-    outfile = os.path.join(out_path, "_index.html")
-    print(outfile)
-    heading = os.path.split(input_path)[-1]
-    template = fill_template("index.html", {"instances": instances, "heading": heading})
-
-    with open(outfile, "w") as fn:
-        fn.write(template)
-        fn.close()
-
-
 def build_cbds(triples):
     """
     :param triples:  an RDD of tuple3s (subject URI, predicate URI, object URI)
@@ -115,15 +96,31 @@ def write_resource_html(subject_tuple, cbd, subjects, out_path="output"):
     :return: filename
     """
     (subject, uri_hash) = subject_tuple
-
     outfile = os.path.join(out_path, str(uri_hash) + ".html")
     bnode = not subject.startswith("http")
+    return write_html(outfile, "resource.html", {"subjects": subjects, "subject": subject, "cbd": cbd, "bnode": bnode})
 
-    with open(outfile, "w", encoding="utf-8") as fn:
-        html = fill_template("resource.html", {"subjects": subjects, "subject": subject, "cbd": cbd, "bnode": bnode})
+
+def write_index_html(instances, input_path, out_path="output"):
+    """
+    :param instances: a dict in which the keys are RDF.types in the source graph,
+    and the values are instance uris of those types
+    :param input_path: source path/filename - becomes index heading
+    :param out_path: where to write output
+
+    Populate html template with instances & write to file "_index.html".
+    """
+    outfile = os.path.join(out_path, "_index.html")
+    heading = os.path.split(input_path)[-1]
+    return write_html(outfile, "index.html", {"instances": instances, "heading": heading})
+
+
+def write_html(filename, template, data_dict):
+    with open(filename, "w", encoding="utf-8") as fn:
+        html = fill_template(template, data_dict)
         fn.write(html)
         fn.close()
-        return outfile
+        return filename
 
 
 def parse_args(args):
@@ -147,22 +144,30 @@ def handle_output_path(outpath):
     print(outpath, "created.")
 
 
-if __name__ == "__main__":
-    start = time.clock()
+def import_spark():  # pragma: no cover
     try:
         from pyspark import SparkContext
         from pyspark import SparkConf
         print("Successfully imported Spark Modules")
-
     except ImportError as e:
         print("Cannot import Spark Modules", e)
         sys.exit(1)
+    else:
+        spark_conf = SparkConf().setMaster("local").setAppName("Rollout")
+        spark_context = SparkContext(conf=spark_conf)
+        return spark_conf, spark_context
 
-    conf = SparkConf().setMaster("local").setAppName("Rollout")
-    sc = SparkContext(conf=conf)
 
+if __name__ == "__main__":
+    start = time.clock()
+
+    # set up Spark
+    conf, sc = import_spark()
+
+    # read in source RDF & path to write static site
     source, output_path = parse_args(sys.argv[1:])
 
+    # flush any pre-existing files in the output path
     handle_output_path(output_path)
 
     trips_graph = extract_triples(source)
