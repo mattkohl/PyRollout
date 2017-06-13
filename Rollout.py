@@ -131,7 +131,7 @@ def parse_args(args):
     return parsed.input, parsed.output
 
 
-def handle_output_path(outpath):
+def prepare_output_directory(outpath):
     if os.path.exists(outpath):
         try:
             print(outpath, "exists. Attempting to delete.")
@@ -158,38 +158,36 @@ def import_spark():  # pragma: no cover
         return spark_conf, spark_context
 
 
+def get_index_filename(output_dir):
+    return "file://" + os.path.join(output_dir, "_index.html")
+
+
+def get_subjects(cbds):
+    return [t[0] for t in cbds.keys()]
+
+
+def pipeline(source, output_path):
+    prepare_output_directory(output_path)
+
+    triples_graph = extract_triples(source)
+    triples_rdd = parallelize_triples(triples_graph)
+
+    index = build_index(triples_rdd)
+    write_index_html(index, source, output_path)
+
+    resource_pages = build_cbds(triples_rdd)
+    [write_resource_html(key, resource_pages[key], get_subjects(resource_pages), output_path) for key in resource_pages]
+
+    return get_index_filename(output_path)
+
+
 if __name__ == "__main__":
-    start = time.clock()
 
     # set up Spark
     conf, sc = import_spark()
 
     # read in source RDF & path to write static site
-    source, output_path = parse_args(sys.argv[1:])
+    source_rdf, output_directory = parse_args(sys.argv[1:])
 
-    # flush any pre-existing files in the output path
-    handle_output_path(output_path)
-
-    trips_graph = extract_triples(source)
-    trips = parallelize_triples(trips_graph)
-
-    print("Building index.")
-    index = build_index(trips)
-    write_index_html(index, source, output_path)
-    print("Index written to", os.path.join(output_path, "_index.html"))
-
-    print("Building resource pages.")
-    cbds = build_cbds(trips)
-    subjs = [t[0] for t in cbds.keys()]
-    [write_resource_html(key, cbds[key], subjs, output_path) for key in cbds]
-    print(len(subjs), "resource pages written.")
-
-    end = time.clock()
-    total_time = end - start
-    m, s = divmod(total_time, 60)
-    h, m = divmod(m, 60)
-
-    print("Done! Rollout took %d:%02d:%02d to finish." % (h, m, s))
-
-    print("To start exploring, open up", os.path.join(output_path, "_index.html"))
-    webbrowser.open_new_tab("file://" + os.path.join(output_path, "_index.html"))
+    done = pipeline(source_rdf, output_directory)
+    webbrowser.open_new_tab(done)
