@@ -12,12 +12,6 @@ Clone the project with this command:
 ```bash
 $ git clone https://github.com/mattkohl/Rollout.git
 ```
-    
-If you don't have Spark, download it [here](http://spark.apache.org/downloads.html), or run `install-spark.sh` for a tmp installation:
-
-```bash
-$ ./install-spark.sh
-```
 
 Create a [virtual environment](https://pypi.python.org/pypi/virtualenv), activate it, and install the dependencies:
 
@@ -28,11 +22,8 @@ $ source ~/.virtualenvs/Rollout/bin/activate
 ```
 
 ### Test
-Set your `SPARK_HOME` environment variable like so:
-```bash
-(Rollout)$ export SPARK_HOME=~/your/path/to/spark
-```
-Then execute this command:
+
+Execute this command:
 ```bash
 (Rollout)$ pytest -q tests/* 
 ```
@@ -44,17 +35,8 @@ Or with coverage:
 ```
 
 ### Run 
-
-Set Spark's Python environment variable:
-
 ```bash
-(Rollout)$ export PYSPARK_PYTHON=python3
-```
-
-Navigate to `/your_spark/bin/` & execute the following:
-
-```bash
-(Rollout)$ ./spark-submit /path/to/Rollout/Rollout.py /your_source_directory/input.nq /your_output_directory/
+(Rollout)$ python Rollout.py /your_source_directory/input.nq /your_output_directory/
 ```
 
 ### View the Results

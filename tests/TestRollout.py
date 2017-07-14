@@ -1,6 +1,3 @@
-import findspark  # this needs to be the first import
-findspark.init()
-
 import os
 import logging
 import pytest
@@ -8,7 +5,7 @@ import pytest
 from pyspark import SparkConf
 from pyspark import SparkContext
 
-from Rollout import RDF_TYPE, env, get_source_format, build_index, build_cbds, \
+from Rollout import RDF_TYPE, get_source_format, build_index, build_cbds, \
     fill_template, extract_triples, parse_args, prepare_output_directory, \
     write_html, get_index_filename, get_subjects
 
