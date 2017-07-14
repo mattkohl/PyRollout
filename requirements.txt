@@ -8,7 +8,7 @@ psutil==5.2.2
 py==1.4.33
 py4j==0.10.6
 pyparsing==2.2.0
-pyspark==2.2.0
+pyspark
 pytest==3.0.7
 pytest-cov==2.5.1
 rdflib==4.2.2
