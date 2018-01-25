@@ -5,7 +5,7 @@ python:
 before_install:
   - export DISPLAY=:99.0
   - export PYSPARK_PYTHON=python3.5
-  - export SPARK_HOME=/tmp/spark-2.1.1-bin-hadoop2.7
+  - export SPARK_HOME=/tmp/spark-2.1.2-bin-hadoop2.7
 install:
   - ./install-spark.sh
   - pip install -r requirements.txt
