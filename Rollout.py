@@ -27,10 +27,12 @@ def extract_triples(source_file):
     try:
         g.parse(source_file, format=source_format)
     except IOError as e:
-        logger.error("Cannot parse" + source_file)
+        msg = "Cannot parse file {}: {}".format(source_file, e)
+        logger.error(msg)
         sys.exit(1)
     else:
-        logger.info("{} parsed. Found {} triples.".format(source_file, len(g)))
+        msg = "{} parsed. Found {} triples.".format(source_file, len(g))
+        logger.info(msg)
         return g
 
 
@@ -144,8 +146,8 @@ def prepare_output_directory(outpath):
         logger.warning("{} exists. Attempting to delete.".format(outpath))
         try:
             shutil.rmtree(outpath)
-        except:
-            raise(OSError("Unable to refresh output directory."))
+        except OSError as e:
+            raise("Unable to refresh output directory:", e)
         else:
             logger.info("Existing copy of {} removed.".format(outpath))
     os.mkdir(outpath)
@@ -157,7 +159,8 @@ def import_spark():  # pragma: no cover
         from pyspark import SparkContext
         from pyspark import SparkConf
     except ImportError as e:
-        logger.error("Cannot import Spark Modules")
+        msg = "Cannot import Spark Modules: {}".format(e)
+        logger.error(msg)
         sys.exit(1)
     else:
         logger.info("Successfully imported Spark Modules")
