@@ -37,7 +37,7 @@ def test_handle_output_path(tmpdir):
 
 
 def test_handle_bad_output_path():
-    with pytest.raises(OSError):
+    with pytest.raises(Exception):
         prepare_output_directory("/")  # illegal dir name
 
 

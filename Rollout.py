@@ -146,7 +146,7 @@ def prepare_output_directory(outpath):
         logger.warning("{} exists. Attempting to delete.".format(outpath))
         try:
             shutil.rmtree(outpath)
-        except OSError as e:
+        except Exception as e:
             raise("Unable to refresh output directory:", e)
         else:
             logger.info("Existing copy of {} removed.".format(outpath))
