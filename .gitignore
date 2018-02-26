@@ -49,3 +49,5 @@ fabric.properties
 .coverage
 cov_html
 .cache
+
+__pycache__

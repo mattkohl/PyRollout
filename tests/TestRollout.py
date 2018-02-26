@@ -1,6 +1,3 @@
-import findspark  # this needs to be the first import
-findspark.init()
-
 import os
 import logging
 import pytest
@@ -9,7 +6,8 @@ from pyspark import SparkConf
 from pyspark import SparkContext
 
 from Rollout import RDF_TYPE, get_source_format, build_index, build_cbds, \
-    fill_template, extract_triples, write_index_html, write_resource_html
+    fill_template, extract_triples, parse_args, prepare_output_directory, \
+    write_html, get_index_filename, get_subjects
 
 
 TRIPLES = [
@@ -18,6 +16,29 @@ TRIPLES = [
 ]
 
 TEST_RDF_PATH = "tests/resources/test.nt"
+
+
+def test_parse_args():
+    a1, a2 = parse_args(['test1.ttl', 'test1'])
+    assert a1 == "test1.ttl"
+    assert a2 == "test1"
+
+
+def test_parse_bad_args():
+    with pytest.raises(SystemExit):
+        parse_args([])
+
+
+def test_handle_output_path(tmpdir):
+    tmpdir.mkdir("sub").join("hello.txt").write("content")
+    assert len(tmpdir.listdir()) == 1
+    prepare_output_directory(tmpdir.strpath)
+    assert len(tmpdir.listdir()) == 0
+
+
+def test_handle_bad_output_path():
+    with pytest.raises(Exception):
+        prepare_output_directory("/")  # illegal dir name
 
 
 def test_extract_triples():
@@ -93,6 +114,22 @@ def test_fill_template_resource():
     result = fill_template(template_file, {"subjects": subjects, "subject": subject, "cbd": cbd, "bnode": bnode})
 
     assert subject in result
+
+
+def test_write_html(tmpdir):
+    written = write_html(os.path.join(tmpdir.strpath, "temp.html"), "index.html", {"instances": [], "heading": "heading"} )
+    assert written.endswith("temp.html")
+
+
+def test_get_index_filename():
+    i = get_index_filename("foo")
+    assert i == "file://foo/_index.html"
+
+
+def test_get_subjects():
+    c = {("http://example.org/1234", "-2058394215090544516"): "foo"}
+    s = get_subjects(c)
+    assert s == ["http://example.org/1234"]
 
 
 def quiet_py4j():
