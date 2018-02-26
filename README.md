@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/mattkohl/Rollout.svg?branch=master)](https://travis-ci.org/mattkohl/Rollout) [![Coverage Status](https://coveralls.io/repos/github/mattkohl/Rollout/badge.svg?branch=master)](https://coveralls.io/github/mattkohl/Rollout?branch=master)
 
-# Rollout
+# PyRollout
 
 A PySpark script that builds a static site from an RDF source
 
@@ -9,7 +9,7 @@ A PySpark script that builds a static site from an RDF source
 Clone the project with this command:
 
 ```bash
-git clone https://github.com/mattkohl/Rollout.git
+git clone https://github.com/mattkohl/PyRollout.git
 ```
     
 If you don't have Spark, download it [here](http://spark.apache.org/downloads.html).
@@ -17,8 +17,8 @@ If you don't have Spark, download it [here](http://spark.apache.org/downloads.ht
 Create a [virtual environment](https://pypi.python.org/pypi/virtualenv), activate it, and install the dependencies:
 
 ```bash
-virtualenv -p python3 ~/.virtualenvs/Rollout
-source ~/.virtualenvs/Rollout/bin/activate
+virtualenv -p python3 ~/.virtualenvs/PyRollout
+source ~/.virtualenvs/PyRollout/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -43,7 +43,7 @@ export PYSPARK_PYTHON=python3
 Navigate to `/your_spark/bin/` & execute the following:
 
 ```bash
-./spark-submit /path/to/Rollout/Rollout.py /your_source_directory/input.nq /your_output_directory/
+./spark-submit /path/to/PyRollout/Rollout.py /your_source_directory/input.nq /your_output_directory/
 ```
 
 ### View the Results
