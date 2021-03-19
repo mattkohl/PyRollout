@@ -2,7 +2,7 @@ appdirs==1.4.3
 attrs==17.4.0
 coverage==4.4.2
 isodate==0.6.0
-Jinja2==2.10
+Jinja2==2.11.3
 MarkupSafe==1.0
 packaging==16.8
 pluggy==0.6.0
